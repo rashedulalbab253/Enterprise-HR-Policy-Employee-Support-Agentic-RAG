@@ -1,6 +1,6 @@
 # Enterprise HR Policy & Employee Support Agentic RAG Copilot
 
-An end-to-end Forward Deployed Engineer (FDE) project that converts an Agentic RAG workflow into a deployable internal HR product using LangGraph, FastAPI, Pinecone, OpenAI, Tavily, HTML, CSS, and JavaScript.
+An end-to-end Forward Deployed Engineer (FDE) project that converts an Agentic RAG workflow into a deployable internal HR product using LangGraph, FastAPI, Pinecone, Groq (Llama 3.3 70B), HuggingFace Local Embeddings, Tavily, HTML, CSS, and JavaScript.
 
 ## 1. Business Problem
 
@@ -194,13 +194,18 @@ pip install -r requirements.txt
 Copy `.env.example` to `.env` and add your keys.
 
 ```env
-OPENAI_API_KEY=your_openai_api_key_here
+# Groq LLM (Free at https://console.groq.com/)
+GROQ_API_KEY=your_groq_api_key_here
+GROQ_MODEL=llama-3.3-70b-versatile
+
+# Local HuggingFace Embeddings (100% Free, runs locally on CPU)
+EMBEDDING_MODEL=all-MiniLM-L6-v2
+
+# Web Search & Vector Store
 TAVILY_API_KEY=your_tavily_api_key_here
 PINECONE_API_KEY=your_pinecone_api_key_here
 PINECONE_INDEX_NAME=fde-hr-policy-rag
 PINECONE_NAMESPACE=company-hr-kb
-OPENAI_MODEL=gpt-4o-mini
-EMBEDDING_MODEL=text-embedding-3-small
 ADMIN_API_KEY=change-me-in-production
 APP_ENV=development
 PORT=8000

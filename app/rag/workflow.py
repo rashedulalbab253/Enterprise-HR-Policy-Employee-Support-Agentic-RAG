@@ -1,11 +1,20 @@
 import logging
 from typing import Literal
-from langchain_openai import ChatOpenAI
 from langchain_tavily import TavilySearch
 from langgraph.graph import StateGraph, START, END
 from app.core.config import get_settings
 from app.rag.state import AgentState, RouteDecision, EvidenceGrade
 from app.rag.vectorstore import get_retriever
+
+try:
+    from langchain_groq import ChatGroq
+except ImportError:
+    ChatGroq = None
+
+try:
+    from langchain_openai import ChatOpenAI
+except ImportError:
+    ChatOpenAI = None
 
 logger = logging.getLogger(__name__)
 settings = get_settings()
@@ -18,13 +27,24 @@ _web_search = None
 def llm():
     global _llm
     if _llm is None:
-        if not settings.openai_api_key:
-            raise RuntimeError("OPENAI_API_KEY is missing")
-        _llm = ChatOpenAI(
-            model=settings.openai_model,
-            temperature=0,
-            api_key=settings.openai_api_key,
-        )
+        if settings.groq_api_key:
+            if ChatGroq is None:
+                raise RuntimeError("langchain-groq is required. Install with: pip install langchain-groq")
+            _llm = ChatGroq(
+                model=settings.groq_model,
+                temperature=0,
+                api_key=settings.groq_api_key,
+            )
+        elif settings.openai_api_key:
+            if ChatOpenAI is None:
+                raise RuntimeError("langchain-openai is required. Install with: pip install langchain-openai")
+            _llm = ChatOpenAI(
+                model=settings.openai_model,
+                temperature=0,
+                api_key=settings.openai_api_key,
+            )
+        else:
+            raise RuntimeError("GROQ_API_KEY is missing. Please set it in your .env file.")
     return _llm
 
 
@@ -50,14 +70,13 @@ def add_trace(state: AgentState, message: str):
 
 
 def route_question(state: AgentState):
-    router = llm().with_structured_output(RouteDecision, method="json_mode")
+    router = llm().with_structured_output(RouteDecision)
     decision = router.invoke(f"""
 You route messages for an enterprise HR policy and employee support assistant.
 Use kb for questions about company HR policies, leave, holidays, benefits, payroll,
 remote work, attendance, onboarding, performance, expenses, travel, conduct, or employee support.
 Use direct only for greetings, thanks, or casual chat that needs no company knowledge.
 Question: {state['question']}
-Return valid JSON like {{"route":"kb"}}.
 """)
     return {"source_used": decision.route, "trace": add_trace(state, f"Router → {decision.route.upper()}")}
 
@@ -74,14 +93,14 @@ def retrieve_kb(state: AgentState):
 
 
 def grade_kb(state: AgentState):
-    grader = llm().with_structured_output(EvidenceGrade, method="json_mode")
+    grader = llm().with_structured_output(EvidenceGrade)
     context = "\n\n".join(f"Source: {d.metadata.get('source','unknown')}\n{d.page_content}" for d in state["kb_docs"])
     grade = grader.invoke(f"""
 You grade evidence for an enterprise HR policy and employee support assistant.
 Question: {state['question']}
 Private company HR KB evidence:\n{context}
 Return good only if the evidence is sufficient to answer confidently and specifically.
-Otherwise return weak. JSON: {{"grade":"good"}} or {{"grade":"weak"}}.
+Otherwise return weak.
 """)
     return {"kb_grade": grade.grade, "trace": add_trace(state, f"KB evidence grade → {grade.grade.upper()}")}
 
@@ -114,12 +133,11 @@ def search_web(state: AgentState):
 
 
 def grade_web(state: AgentState):
-    grader = llm().with_structured_output(EvidenceGrade, method="json_mode")
+    grader = llm().with_structured_output(EvidenceGrade)
     grade = grader.invoke(f"""
 Question: {state['question']}
 Web evidence:\n{state['web_results']}
 Return good if the evidence is sufficient and directly relevant; otherwise weak.
-Return valid JSON like {{"grade":"good"}}.
 """)
     return {"web_grade": grade.grade, "trace": add_trace(state, f"Web evidence grade → {grade.grade.upper()}")}
 

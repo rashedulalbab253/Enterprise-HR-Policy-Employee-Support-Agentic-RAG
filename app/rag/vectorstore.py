@@ -1,8 +1,17 @@
 import time
-from pinecone import Pinecone , ServerlessSpec
-from langchain_openai import OpenAIEmbeddings
+from pinecone import Pinecone, ServerlessSpec
 from langchain_pinecone import PineconeVectorStore
 from app.core.config import get_settings
+
+try:
+    from langchain_huggingface import HuggingFaceEmbeddings
+except ImportError:
+    from langchain_community.embeddings import HuggingFaceEmbeddings
+
+try:
+    from langchain_openai import OpenAIEmbeddings
+except ImportError:
+    OpenAIEmbeddings = None
 
 settings = get_settings()
 
@@ -16,6 +25,11 @@ EMBEDDING_DIMENSIONS = {
     "text-embedding-3-large": 3072,
     "text-embedding-ada-002": 1536,
     "all-minilm-l6-v2": 384,
+    "sentence-transformers/all-minilm-l6-v2": 384,
+    "bge-small-en-v1.5": 384,
+    "baai/bge-small-en-v1.5": 384,
+    "bge-base-en-v1.5": 768,
+    "baai/bge-base-en-v1.5": 768,
 }
 
 
@@ -26,14 +40,14 @@ def get_embedding_dimension(model_name: str | None = None) -> int:
     normalized = name.lower()
     if normalized in EMBEDDING_DIMENSIONS:
         return EMBEDDING_DIMENSIONS[normalized]
-    if "text-embedding-3-small" in normalized:
+    if "text-embedding-3-small" in normalized or "text-embedding-ada-002" in normalized:
         return 1536
     if "text-embedding-3-large" in normalized:
         return 3072
-    if "text-embedding-ada-002" in normalized:
-        return 1536
-    if "all-minilm" in normalized:
+    if "minilm" in normalized or "bge-small" in normalized:
         return 384
+    if "bge-base" in normalized or "text-embedding-004" in normalized:
+        return 768
     raise ValueError(
         f"Unsupported embedding model '{model_name or settings.embedding_model}' for Pinecone. "
         "Add the matching dimension to EMBEDDING_DIMENSIONS."
@@ -44,12 +58,28 @@ def get_embedding_dimension(model_name: str | None = None) -> int:
 def get_embeddings():
     global _embeddings
     if _embeddings is None:
-        if not settings.openai_api_key:
-            raise RuntimeError("OPENAI_API_KEY is missing")
-        _embeddings = OpenAIEmbeddings(
-            model=settings.embedding_model,
-            api_key=settings.openai_api_key,
-        )
+        model_name = settings.embedding_model.strip()
+        if model_name.startswith("text-embedding-"):
+            if not settings.openai_api_key:
+                raise RuntimeError("OPENAI_API_KEY is missing for OpenAI embeddings")
+            if OpenAIEmbeddings is None:
+                raise RuntimeError("langchain-openai is required for OpenAI embeddings")
+            _embeddings = OpenAIEmbeddings(
+                model=model_name,
+                api_key=settings.openai_api_key,
+            )
+        else:
+            # Local HuggingFace Embeddings (Free, runs locally on CPU)
+            hf_model = (
+                f"sentence-transformers/{model_name}"
+                if "/" not in model_name and not model_name.startswith("sentence-transformers")
+                else model_name
+            )
+            _embeddings = HuggingFaceEmbeddings(
+                model_name=hf_model,
+                model_kwargs={"device": "cpu"},
+                encode_kwargs={"normalize_embeddings": True},
+            )
     return _embeddings
 
 
