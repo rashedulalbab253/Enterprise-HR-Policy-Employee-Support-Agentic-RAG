@@ -1,0 +1,15 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rashedulalbab1234/enterprise-hr-policy-rag:latest
+    container_name: hr_policy_rag_app
+    ports:
+      - "8000:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/uploads
+    restart: unless-stopped
