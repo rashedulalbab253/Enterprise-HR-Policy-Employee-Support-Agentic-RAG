@@ -4,77 +4,267 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{ app_name }}</title>
-  <link rel="stylesheet" href="/static/css/style.css" />
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css?v=3" />
 </head>
 <body>
-  <div class="shell">
-    <aside class="sidebar">
-      <div>
-        <h1>HR Policy<br/>Agentic RAG</h1>
-        <p class="muted">Private company HR knowledge first. External web only when evidence is weak.</p>
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <a href="/" class="brand-link">
+          <span class="brand-name">Enterprise HR Copilot</span>
+        </a>
       </div>
-      <div class="workflow-card">
-        <h3>LangGraph Workflow</h3>
-        <div class="flow-step">1. Route question</div>
-        <div class="flow-step">2. Retrieve private KB</div>
-        <div class="flow-step">3. Grade evidence</div>
-        <div class="flow-step">4. Web fallback if weak</div>
-        <div class="flow-step">5. Rewrite & retry</div>
-        <div class="flow-step">6. Grounded answer</div>
-      </div>
-      <button id="openUpload" class="secondary-btn">+ Add HR Document</button>
-    </aside>
-
-    <main class="main">
-      <header class="topbar">
-        <div>
+      <div class="nav-actions">
+        <div class="nav-status">
           <span class="status-dot"></span>
-          <span>Employee Knowledge Copilot</span>
+          <span class="status-text">Agentic RAG Active</span>
         </div>
-        <span class="pill">Agentic RAG</span>
-      </header>
-      <section id="chat" class="chat-area">
-        <div class="message assistant">
-          <div class="avatar">HR</div>
-          <div class="bubble">
-            <strong>How can I help with HR policies or employee support?</strong>
-            <p>Try: “How many annual leave days do employees receive?” or ask something that may require current external employment information.</p>
+        <button id="openUpload" class="nav-btn-secondary" title="Upload HR Document">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <span>Add Document</span>
+        </button>
+        <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="page-container">
+    <!-- Hero Header -->
+    <section class="hero-section">
+      <h1 class="hero-title">HR Policy & Support Services</h1>
+      <p class="hero-subtitle">
+        Advanced AI-powered Agentic RAG tools to help you navigate company policies, employee benefits, and statutory compliance.
+      </p>
+    </section>
+
+    <!-- Services Grid (Exactly matching the reference image layout) -->
+    <section class="services-section">
+      <div class="services-grid">
+        <!-- Card 1 -->
+        <div class="service-card" data-query="How many annual leave days do employees receive?">
+          <div class="service-icon-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+          <h2 class="service-title">Annual Leave & PTO</h2>
+          <p class="service-description">
+            Review your annual leave days, emergency time off, and carry-forward entitlements.
+          </p>
+          <p class="service-subtext">
+            Full-time employees receive 20 days paid leave per year. Check approval windows and unused day limits.
+          </p>
+          <div class="card-action">
+            <span>Ask about Leave Policy &rarr;</span>
           </div>
         </div>
-      </section>
-      <section class="composer-wrap">
-        <div class="examples">
-          <button class="example">How many annual leave days do employees receive?</button>
-          <button class="example">What is our remote work policy?</button>
-          <button class="example">What are the latest public holiday rules in Bangladesh?</button>
+
+        <!-- Card 2 -->
+        <div class="service-card" data-query="What is our remote work policy?">
+          <div class="service-icon-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <h2 class="service-title">Remote Work Policy</h2>
+          <p class="service-description">
+            Evaluate flexible work-from-home rules, hybrid schedules, and availability hours.
+          </p>
+          <p class="service-subtext">
+            Covers weekly remote day allowances, equipment stipends, and cross-border working restrictions.
+          </p>
+          <div class="card-action">
+            <span>Ask about Remote Work &rarr;</span>
+          </div>
         </div>
-        <form id="chatForm" class="composer">
-          <textarea id="question" rows="2" placeholder="Ask an HR policy or employee support question..." required></textarea>
-          <button type="submit" class="send-btn">Ask Agent</button>
-        </form>
-      </section>
-    </main>
-    <aside class="trace-panel">
-      <h2>Agent Trace</h2>
-      <p class="muted">Watch LangGraph decisions while the request runs.</p>
-      <div id="trace" class="trace-list"><div class="empty">No request yet.</div></div>
-      <div class="source-box">
-        <span>Final Source</span>
-        <strong id="sourceUsed">—</strong>
+
+        <!-- Card 3 -->
+        <div class="service-card" data-query="What are the latest public holiday rules in Bangladesh?">
+          <div class="service-icon-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+          </div>
+          <h2 class="service-title">Statutory Holidays</h2>
+          <p class="service-description">
+            Up-to-date statutory public holiday rules and labor regulations for Bangladesh.
+          </p>
+          <p class="service-subtext">
+            Fallback web search retrieves official gazette dates, substitute day-off policies, and holiday overtime.
+          </p>
+          <div class="card-action">
+            <span>Check Holiday Rules &rarr;</span>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="service-card" data-query="What health insurance and employee benefits are provided?">
+          <div class="service-icon-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
+          <h2 class="service-title">Benefits & Health</h2>
+          <p class="service-description">
+            Access medical insurance coverage, wellness stipends, and employee conduct codes.
+          </p>
+          <p class="service-subtext">
+            Details on inpatient hospitalization, outpatient reimbursement, and onboarding checklists.
+          </p>
+          <div class="card-action">
+            <span>Ask about Benefits &rarr;</span>
+          </div>
+        </div>
       </div>
-    </aside>
-  </div>
+    </section>
+
+    <!-- Interactive Copilot Chat Section -->
+    <section class="copilot-section" id="copilotSection">
+      <div class="copilot-container">
+        <!-- Copilot Header -->
+        <div class="copilot-header">
+          <div class="copilot-title-wrap">
+            <div class="copilot-avatar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/>
+                <rect x="3" y="10" width="18" height="12" rx="4"/>
+                <line x1="8" y1="16" x2="8" y2="16.01"/>
+                <line x1="16" y1="16" x2="16" y2="16.01"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="copilot-title">HR Policy AI Assistant</h3>
+              <p class="copilot-sub">Powered by LangGraph Agentic RAG • Pinecone • Groq</p>
+            </div>
+          </div>
+          <div class="copilot-controls">
+            <button id="toggleTraceBtn" class="pill-btn" title="Toggle LangGraph Reasoning Trace">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+              <span>View Agent Trace</span>
+              <span id="traceCount" class="trace-count-pill">0</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Collapsible LangGraph Trace Drawer -->
+        <div id="traceDrawer" class="trace-drawer hidden">
+          <div class="trace-drawer-head">
+            <span class="trace-drawer-title">LangGraph Execution Steps</span>
+            <span id="sourceUsed" class="source-tag">Source: —</span>
+          </div>
+          <div id="trace" class="trace-drawer-body">
+            <div class="empty-trace">No reasoning steps recorded yet. Ask a question below to see live LangGraph routing.</div>
+          </div>
+        </div>
+
+        <!-- Messages Area -->
+        <div id="chat" class="chat-area">
+          <div class="message assistant">
+            <div class="avatar assistant">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/>
+                <rect x="3" y="10" width="18" height="12" rx="4"/>
+                <line x1="8" y1="16" x2="8" y2="16.01"/>
+                <line x1="16" y1="16" x2="16" y2="16.01"/>
+              </svg>
+            </div>
+            <div class="bubble">
+              <p><strong>Hello! How can I assist with your HR policy or employee support questions today?</strong></p>
+              <p class="bubble-subtext">Click any of the service cards above or type your question in the box below. I search official company handbooks first and only query verified external sources when needed.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Composer Form -->
+        <div class="composer-container">
+          <form id="chatForm" class="composer-form">
+            <div class="composer-input-wrapper">
+              <textarea id="question" rows="1" placeholder="Type your HR policy question here (e.g., 'What is our annual leave policy?')..." required></textarea>
+            </div>
+            <button type="submit" id="sendBtn" class="send-btn" title="Send question">
+              <span>Ask Copilot</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Document Upload Modal -->
   <div id="uploadModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
     <div class="modal-card">
-      <div class="modal-head"><h2>Ingest HR Document</h2><button id="closeUpload">×</button></div>
-      <p class="muted">Upload PDF, TXT, Markdown, or DOCX. The document is chunked, embedded, and indexed into Pinecone.</p>
-      <input id="adminKey" type="password" placeholder="Admin API key" />
-      <input id="fileInput" type="file" accept=".pdf,.txt,.md,.docx" />
-      <button id="uploadBtn" class="send-btn full">Index Document</button>
-      <div id="uploadStatus" class="upload-status"></div>
+      <div class="modal-head">
+        <div class="modal-title-wrap">
+          <div class="modal-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="modal-title">Upload HR Policy Document</h3>
+            <p class="modal-sub">Index PDF, DOCX, TXT, or Markdown into Pinecone</p>
+          </div>
+        </div>
+        <button id="closeUpload" class="modal-close" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-desc">
+          Documents will be chunked, embedded via <strong>BAAI/bge-small-en-v1.5</strong>, and instantly queryable by the RAG workflow.
+        </p>
+        
+        <div class="form-group">
+          <label for="adminKey">Admin Authorization Key</label>
+          <input id="adminKey" type="password" placeholder="Enter ADMIN_API_KEY..." />
+        </div>
+
+        <div class="form-group">
+          <label for="fileInput">Select File</label>
+          <div class="file-drop-area">
+            <input id="fileInput" type="file" accept=".pdf,.txt,.md,.docx" />
+          </div>
+        </div>
+
+        <button id="uploadBtn" class="btn-primary-full">
+          <span>Index into Knowledge Base</span>
+        </button>
+        <div id="uploadStatus" class="upload-status"></div>
+      </div>
     </div>
   </div>
+
+  <!-- Marked.js for Rich Markdown & Tables -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="/static/js/app.js"></script>
+  <script src="/static/js/app.js?v=3"></script>
 </body>
 </html>
