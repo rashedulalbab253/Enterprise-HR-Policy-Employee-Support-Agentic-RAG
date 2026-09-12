@@ -9,14 +9,14 @@ class Settings(BaseSettings):
     app_name: str = "Enterprise HR Policy Agentic RAG Copilot"
     app_env: str = "development"
     groq_api_key: str = ""
-    groq_model: str = "llama-3.3-70b-versatile"
+    groq_model: str = "openai/gpt-oss-120b"
     openai_api_key: str = ""
     openai_model: str = "gpt-4o-mini"
     tavily_api_key: str = ""
     pinecone_api_key: str = ""
     pinecone_index_name: str = "fde-hr-policy-rag"
     pinecone_namespace: str = "company-hr-kb"
-    embedding_model: str = "all-MiniLM-L6-v2"
+    embedding_model: str = "bge-small-en-v1.5"
     top_k: int = 4
     max_retries: int = 1
     admin_api_key: str = "change-me-in-production"

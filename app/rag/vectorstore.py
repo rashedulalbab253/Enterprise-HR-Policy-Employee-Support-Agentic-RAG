@@ -55,6 +55,18 @@ def get_embedding_dimension(model_name: str | None = None) -> int:
 
 
 
+def resolve_hf_model_name(model_name: str) -> str:
+    name = model_name.strip()
+    if "/" in name:
+        return name
+    lowered = name.lower()
+    if lowered.startswith("bge-"):
+        return f"BAAI/{name}"
+    if lowered.startswith("all-") or lowered.startswith("paraphrase-") or lowered.startswith("multi-qa-"):
+        return f"sentence-transformers/{name}"
+    return name
+
+
 def get_embeddings():
     global _embeddings
     if _embeddings is None:
@@ -70,11 +82,7 @@ def get_embeddings():
             )
         else:
             # Local HuggingFace Embeddings (Free, runs locally on CPU)
-            hf_model = (
-                f"sentence-transformers/{model_name}"
-                if "/" not in model_name and not model_name.startswith("sentence-transformers")
-                else model_name
-            )
+            hf_model = resolve_hf_model_name(model_name)
             _embeddings = HuggingFaceEmbeddings(
                 model_name=hf_model,
                 model_kwargs={"device": "cpu"},
