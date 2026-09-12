@@ -30,6 +30,8 @@ Deliver an intelligent, grounded **Employee Knowledge Copilot** that:
 
 ## 2. System Architecture
 
+![Enterprise HR Policy & Employee Support Agentic RAG System Architecture](docs/architecture.png)
+
 ```text
                ┌────────────────────────────────────────────────────────┐
                │                     Employee / HR                      │
