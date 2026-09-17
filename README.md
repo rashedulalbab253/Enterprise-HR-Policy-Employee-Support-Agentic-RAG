@@ -1,3 +1,13 @@
+---
+title: Enterprise HR Policy Agentic RAG Copilot
+emoji: 🏢
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # Enterprise HR Policy & Employee Support Agentic RAG Copilot
 
 An enterprise-ready **Agentic RAG (Retrieval-Augmented Generation)** system designed for internal HR support. Built using **LangGraph**, **FastAPI**, **Pinecone**, **Groq LLMs** (or OpenAI), **HuggingFace Local Embeddings**, **Tavily Web Search**, and modern **HTML5/CSS3/Vanilla JS** UI.

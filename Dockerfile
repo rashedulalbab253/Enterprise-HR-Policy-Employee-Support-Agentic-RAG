@@ -4,7 +4,7 @@ WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PORT=8080
+    PORT=7860
 
 # Install system dependencies (if needed for build/compilation)
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -16,12 +16,20 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
+# Ensure non-root user (UID 1000 required by Hugging Face Spaces)
+RUN useradd -m -u 1000 user
+
 # Copy project files
 COPY . .
 
-# Ensure data and upload directories exist
-RUN mkdir -p /app/data /app/uploads
+# Ensure data and upload directories exist and assign permissions to user 1000
+RUN mkdir -p /app/data /app/uploads \
+    && chown -R user:user /app
 
-EXPOSE 8080
+USER user
+ENV HOME=/home/user \
+    PATH=/home/user/.local/bin:$PATH
 
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"]
+EXPOSE 7860
+
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-7860}"]
